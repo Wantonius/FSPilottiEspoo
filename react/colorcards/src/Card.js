@@ -9,6 +9,18 @@ export default class Card extends React.Component {
 			color:"red"
 		}
 	}
+	
+	changeColor = () => {
+		let color = "#";
+		let colorpicker = "0123456789abcdef"
+		for(let i=0;i<6;i++) {
+			let temp = Math.floor(Math.random()*16)
+			color = color + colorpicker[temp]
+		}
+		this.setState({
+			color:color
+		})
+	}
 	render() {
 		let cardStyle= {
 			height:200,
@@ -21,7 +33,8 @@ export default class Card extends React.Component {
 	return (
 		<div style={cardStyle}>
 			<Square color={this.state.color}/>
-			<Label color={this.state.color}/>
+			<Label color={this.state.color}
+				   changeColor={this.changeColor}/>
 		</div>
 	)
 	}

@@ -2,6 +2,9 @@ import React from 'react';
 
 export default class Label extends React.Component {
 
+	click = (event) => {
+		this.props.changeColor();
+	}
 
 	render() {
 		let labelStyle = {
@@ -11,7 +14,8 @@ export default class Label extends React.Component {
 			margin:0			
 		}
 		return(
-			<p style={labelStyle}>{this.props.color}</p>
+			<p style={labelStyle}
+			   onClick={this.click}>{this.props.color}</p>
 		)
 	}
 }
