@@ -4,7 +4,7 @@ import {Table,Button} from 'semantic-ui-react';
 export default class ShoppingList extends React.Component {
 
 	remove =(event) => {
-	//	this.props.removeFromList(event.target.name);
+		this.props.removeFromList(event.target.name);
 	}
 
 	render() {
