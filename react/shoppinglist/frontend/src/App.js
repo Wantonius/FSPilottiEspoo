@@ -1,27 +1,38 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import ShoppingList from './ShoppingList';
-import ShoppingForm from './ShoppingForm';
+import NavBar from './NavBar';
+import Main from './Main';
 
 class App extends Component {
   
   constructor(props) {
 	  super(props);
 	  this.state = {
-		  list:[]
+		  list:[],
+		  token:"",
+		  isLogged:false
 	  }
   }
   
   componentDidMount() {
-	  this.getList();
+	  if(this.state.isLogged) {
+		this.getList();
+	  }
   }
   
-  getList = () => {
+  
+  //Shopping API
+  
+  getList = (token) => {
+	  if(!token) {
+		  token = this.state.token
+	  }
 	  let getObject = {
 		  method: "GET",
 		  mode: "cors",
-		  headers: {"Content-Type":"application/json"}
+		  headers: {"Content-Type":"application/json",
+					 "token":token}
 	  }
 	fetch("/api/shopping", getObject).then((response) => {
 		if(response.ok) {
@@ -44,7 +55,9 @@ class App extends Component {
 	  let postObject = {
 		  method: "POST",
 		  mode: "cors",
-		  headers: {"Content-Type":"application/json"},
+		  headers: {"Content-Type":"application/json",
+					"token":this.state.token
+		  },
 		  body:JSON.stringify(item)
 	  }
 	fetch("/api/shopping", postObject).then((response) => {
@@ -62,7 +75,8 @@ class App extends Component {
 	  let deleteObject= {
 			method:"DELETE",
 			mode:"cors",
-			headers:{"Content-Type":"application/json"}
+			headers:{"Content-Type":"application/json",
+			"token":this.state.token}
 	  }
 	  fetch("/api/shopping/"+id,deleteObject).then((response) => {
 		if(response.ok) {
@@ -75,14 +89,61 @@ class App extends Component {
 	});	  
   }
   
-	
+  //LOGIN API
+  
+  login = (user) => {
+	  let loginObject = {
+		  method:"POST",
+		  mode:"cors",
+		  headers:{"Content-Type":"application/json"},
+		  body:JSON.stringify(user)
+		  }
+	  fetch("/login",loginObject).then((response) => {
+		  if(response.ok) {
+			  response.json().then((data)=> {
+				  this.setState({
+					  token:data.token,
+					  isLogged:true
+				  })
+				  this.getList(data.token);
+			  }).catch((error) => {
+				  console.log(error)
+			  })
+		  } else {
+			  alert("Wrong credentials");
+		  }
+	  }).catch((error) => {
+		  console.log(error)
+	  })
+  }
+  register = (user) => {
+	  let registerObject = {
+		  method:"POST",
+		  mode:"cors",
+		  headers:{"Content-Type":"application/json"},
+		  body:JSON.stringify(user)
+		  }
+	  fetch("/register",registerObject).then((response) => {
+		  if(response.ok) {
+				alert("Register successful!");
+		  } else {
+			  alert("Username already in use");
+		  }
+	  }).catch((error) => {
+		  console.log(error)
+	  })
+  }	
   render() {
     return (
       <div className="App">
-	    <ShoppingForm addToList={this.addToList}/>
+		<NavBar isLogged={this.state.isLogged}/>
 		<hr/>
-		<ShoppingList list={this.state.list}
-					  removeFromList={this.removeFromList}/>
+	    <Main addToList={this.addToList}
+			  list={this.state.list}
+			  removeFromList={this.removeFromList}
+			  login={this.login}
+			  register={this.register}
+			  isLogged={this.state.isLogged}/>
       </div>
     );
   }
