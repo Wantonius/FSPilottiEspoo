@@ -1,48 +1,75 @@
 const express = require("express");
 const bodyParser = require("body-parser")
 const shoppingrouter = require("./routes/shoppingrouter");
+const mongoose = require("mongoose");
+const userModel = require("./models/user");
+const bcrypt = require("bcrypt-nodejs");
 
 let app = express();
 app.use(bodyParser.json());
 //User databases
 
+mongoose.connect("mongodb://localhost/shoppinglistdatabase").then(
+	() => {console.log("Connection to mongoDB successful")},
+	(error) => {console.log("Connection to mongoDB failed:"+error)}
+);
+
 let loggedUsers = [];
-let registeredUsers = [];
+
+function createSaltedPassword(pw) {
+	return bcrypt.hashSync(pw,bcrypt.genSaltSync(8),null);
+}
+
+function isPasswordValid(pw,hash) {
+	return bcrypt.compareSync(pw,hash);
+}
 
 app.post("/login", function(req,res) {
-	let user = {
-		"username":req.body.username,
-		"password":req.body.password
+	console.log(req.body);	
+	if(!req.body.username || !req.body.password) {
+		return res.status(409).json({"message":"provide credentials"})
 	}
-	for(let i=0;i<registeredUsers.length;i++) {
-		if(user.username === registeredUsers[i].username) {
-			if(user.password === registeredUsers[i].password){
-				let token = createToken();
-				loggedUsers.push({
-					"username":user.username,
-					"token":token
-				})
-				return res.status(200).json({
-					"token":token
-				})
-			}
+	if(req.body.username.length ===0 || req.body.password.length ===0) {
+		return res.status(409).json({"message":"provide credentials"})		
+	}
+	userModel.findOne({"username":req.body.username}, function(err,user) {
+		if(err) {
+			res.status(403).json({"message":"wrong credentials"})
 		}
-	}
-	res.status(403).json({"message":"wrong credentials"});
+		if(!user) {
+			res.status(403).json({"message":"wrong credentials"})			
+		}
+		if(isPasswordValid(req.body.password, user.password)) {
+			let token = createToken();
+			loggedUsers.push({
+				"username":user.username,
+				"token":token
+			})
+			return res.status(200).json({
+				"token":token
+			})
+		}
+		return res.status(403).json({"message":"wrong credentials"});
+	});
 });
 
 app.post("/register", function(req,res) {
-	let user = {
+	if(!req.body.username || !req.body.password) {
+		return res.status(409).json({"message":"provide credentials"})
+	}
+	if(req.body.username.length ===0 || req.body.password.length ===0) {
+		return res.status(409).json({"message":"provide credentials"})		
+	}
+	let user = new userModel({
 		"username":req.body.username,
-		"password":req.body.password
-	}
-	for(let i=0;i<registeredUsers.length;i++) {
-		if(user.username === registeredUsers[i].username) {
+		"password":createSaltedPassword(req.body.password)
+	})
+	user.save(function(err) {
+		if(err) {
 			return res.status(409).json({"message":"username already in use"})
-		}		
-	}
-	registeredUsers.push(user)
-	res.status(200).json({"message":"success"});
+		}
+		return res.status(200).json({"message":"success"})
+	})
 });
 
 function isUserLogged(req,res,next) {
