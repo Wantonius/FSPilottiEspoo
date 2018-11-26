@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt-nodejs");
 const passport = require("passport");
 const localStrategy = require("passport-local").Strategy
 const session = require("express-session");
-const mongoStore = require("connect-mongo");
+const MongoStore = require("connect-mongo")(session);
 
 let app = express();
 app.use(bodyParser.json());
@@ -33,6 +33,24 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+passport.serializeUser(function(user,done) {
+	console.log("serializeUser:"+user.username);
+	done(null,user._id);
+});
+
+passport.deserializeUser(function(id,done) {
+	console.log("deserializeUser");
+	userModel.findById(id,function(err, user) {
+		if(err) {
+			return done(err);
+		}
+		if(!user) {
+			return done(null,false);
+		}
+		return done(null,user);
+	});	
+});
 
 passport.use("local-login", new localStrategy({
 	usernameField:"username",
@@ -95,11 +113,8 @@ app.post("/register", function(req,res) {
 
 function isUserLogged(req,res,next) {
 	let token = req.headers.token;
-	for(let i=0;i<loggedUsers.length;i++) {
-		if(token === loggedUsers[i].token) {
-			req.username = loggedUsers[i].username;
-			return next();
-		}
+	if(req.isAuthenticated()) {
+		return next();
 	}
 	res.status(403).json({"message":"not allowed"});
 }

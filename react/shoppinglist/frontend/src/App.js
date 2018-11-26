@@ -31,6 +31,7 @@ class App extends Component {
 	  let getObject = {
 		  method: "GET",
 		  mode: "cors",
+		  credentials:"include",
 		  headers: {"Content-Type":"application/json",
 					 "token":token}
 	  }
@@ -55,6 +56,7 @@ class App extends Component {
 	  let postObject = {
 		  method: "POST",
 		  mode: "cors",
+		  credentials:"include",
 		  headers: {"Content-Type":"application/json",
 					"token":this.state.token
 		  },
@@ -75,6 +77,7 @@ class App extends Component {
 	  let deleteObject= {
 			method:"DELETE",
 			mode:"cors",
+			credentials:"include",
 			headers:{"Content-Type":"application/json",
 			"token":this.state.token}
 	  }
