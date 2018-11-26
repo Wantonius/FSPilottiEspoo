@@ -4,6 +4,10 @@ import {List} from 'semantic-ui-react';
 
 export default class NavBar extends React.Component {
 	
+	logout = () => {
+		this.props.logout();
+	}
+	
 	render() {
 		let navbar;
 		if(this.props.isLogged) {
@@ -14,6 +18,8 @@ export default class NavBar extends React.Component {
 						<List.Item><Link name="form"
 									to="/form">Add Item</Link>
 									</List.Item>
+						<List.Item><Link name="logout"
+									to="/" onClick={this.logout}>Logout</Link></List.Item>
 					</List>
 		} else {
 			navbar = <div style={{height:65}}/>

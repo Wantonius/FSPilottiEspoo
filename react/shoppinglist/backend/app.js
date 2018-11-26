@@ -92,6 +92,13 @@ passport.authenticate("local-login",{failureRedirect:"/"}),function(req,res) {
 	return res.status(200).json({"token":req.session.token})
 });
 
+app.post("/logout", function(req,res) {
+	if(req.session) {
+		req.session.destroy();
+	}
+	res.status(200).json({"message":"logged out"});
+});
+
 app.post("/register", function(req,res) {
 	if(!req.body.username || !req.body.password) {
 		return res.status(409).json({"message":"provide credentials"})

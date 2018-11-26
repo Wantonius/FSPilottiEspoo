@@ -136,10 +136,32 @@ class App extends Component {
 		  console.log(error)
 	  })
   }	
+  
+  logout = () => {
+	  let logoutObject = {
+		  method:"POST",
+		  mode:"cors",
+		  credentials:"include",
+		  headers:{"Content-Type":"application/json"}
+		  }	
+	  fetch("/logout", logoutObject).then((response) => {
+		  if(response.ok) {
+			  this.setState({
+				  token:"",
+				  isLogged:false
+			  })
+		  } else {
+			  console.log("Server responded with status:"+response.status)
+		  }
+	  }).catch((error) => {
+		  console.log(error);
+	  })
+  }
   render() {
     return (
       <div className="App">
-		<NavBar isLogged={this.state.isLogged}/>
+		<NavBar isLogged={this.state.isLogged}
+				logout={this.logout}/>
 		<hr/>
 	    <Main addToList={this.addToList}
 			  list={this.state.list}
