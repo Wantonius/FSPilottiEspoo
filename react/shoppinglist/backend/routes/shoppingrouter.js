@@ -1,43 +1,44 @@
 const express = require("express");
+const mongoose = require("mongoose");
+const shoppingItem = require("../models/shoppingitem");
 
 let router = express.Router();
 
-let database = [
-	{
-		"id":99,
-		"type":"Banana",
-		"count":2,
-		"price":3
-	}
-];
-let id = 100;
 
 router.get("/shopping", function(req,res) {
-	res.status(200).json(database);
+	shoppingItem.find(function(err, items) {
+		if(err){
+			return res.status(404).json({"message":"shoppinglist not found"})
+		}
+		if(!items) {
+			return res.status(404).json({"message":"shoppinglist not found"})
+		}
+		return res.status(200).json(items);
+	})
 })
 
 router.post("/shopping", function(req,res) {
-	let item = {
-		id:id,
+	let item = new shoppingItem({
 		type:req.body.type,
 		count:req.body.count,
 		price:req.body.price
-	}
-	id++;
-	database.push(item);
-	console.log(database);
-	res.status(200).json({"message":"success"});
+	})
+	item.save(function(err) {
+		if(err) {
+			return res.status(409).json({"message":"item not saved"})
+		}
+		return res.status(200).json({"message":"success"});
+	})
+
 });
 
 router.delete("/shopping/:id", function(req,res) {
-	let tempId = parseInt(req.params.id,10);
-	for(let i=0;i<database.length;i++) {
-		if(database[i].id === tempId ) {
-			database.splice(i,1);
-			return res.status(200).json({"message":"success"})
+	shoppingItem.deleteOne({"_id":req.params.id}, function(err) {
+		if(err) {
+			return res.status(404).json({"message":"not found"});			
 		}
-	}
-	res.status(404).json({"message":"not found"});
+		return res.status(200).json({"message":"success"})
+	})
 });
 
 module.exports = router;

@@ -9,12 +9,12 @@ export default class ShoppingList extends React.Component {
 
 	render() {
 		let items = this.props.list.map((item) => {
-			return <Table.Row key={item.id}>
+			return <Table.Row key={item._id}>
 						<Table.Cell>{item.type}</Table.Cell>
 						<Table.Cell>{item.count}</Table.Cell>
 						<Table.Cell>{item.price}</Table.Cell>
 						<Table.Cell><Button onClick={this.remove} 
-									name={item.id}>Remove</Button></Table.Cell>
+									name={item._id}>Remove</Button></Table.Cell>
 									
 					</Table.Row>
 		})
