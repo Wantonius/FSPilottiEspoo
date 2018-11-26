@@ -5,7 +5,12 @@ import {connect} from 'react-redux';
 class MyList extends React.Component {
 
 	remove =(event) => {
-		//this.props.removeFromList(event.target.name);
+		console.log("MyList - remove");
+		let action= {
+			"type":"REMOVE_FROM_LIST",
+			"id":event.target.name
+		}
+		this.props.dispatch(action);
 	}
 
 	render() {

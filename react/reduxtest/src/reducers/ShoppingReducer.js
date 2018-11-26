@@ -4,7 +4,7 @@ const initialState = {
 }
 
 const shoppingReducer = (state = initialState, action) => {
-	console.log("ShoppingReducer - before switch")
+	console.log("ShoppingReducer - before switch:"+action.type);
 	let tempState = {}
 	switch(action.type) {	
 		case "ADD_TO_LIST": 
@@ -19,6 +19,19 @@ const shoppingReducer = (state = initialState, action) => {
 			tempState = {
 				list:tempList,
 				id:tempId
+			}
+			return tempState;
+		case "REMOVE_FROM_LIST": 
+			let tempList2 = [];
+			let deleteId = parseInt(action.id,10)
+			for(let j=0;j<state.list.length;j++) {
+				if(deleteId !== state.list[j].id) {
+					tempList2.push(state.list[j])
+				}
+			}
+			tempState= {
+				...state,
+				list:tempList2
 			}
 			return tempState;
 		default:
