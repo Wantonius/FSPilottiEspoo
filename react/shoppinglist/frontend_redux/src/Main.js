@@ -3,6 +3,7 @@ import {Switch, Route, Redirect} from 'react-router-dom'
 import ShoppingList from './ShoppingList';
 import ShoppingForm from './ShoppingForm';
 import LoginForm from './LoginForm';
+import {connect} from 'react-redux';
 
 export default class Main extends React.Component {
 
@@ -32,3 +33,4 @@ export default class Main extends React.Component {
 	}
 
 }
+

@@ -3,23 +3,17 @@ import logo from './logo.svg';
 import './App.css';
 import NavBar from './NavBar';
 import Main from './Main';
+import {connect} from 'react-redux';
 
 class App extends Component {
   
   constructor(props) {
 	  super(props);
 	  this.state = {
-		  list:[],
-		  token:"",
-		  isLogged:false
+		  list:[]
 	  }
   }
-  
-  componentDidMount() {
-	  if(this.state.isLogged) {
-		this.getList();
-	  }
-  }
+ 
   
   
   //Shopping API
@@ -94,68 +88,29 @@ class App extends Component {
   
   //LOGIN API
   
-  login = (user) => {
-	  let loginObject = {
-		  method:"POST",
-		  mode:"cors",
-		  headers:{"Content-Type":"application/json"},
-		  body:JSON.stringify(user)
-		  }
-	  fetch("/login",loginObject).then((response) => {
-		  if(response.ok) {
-			  response.json().then((data)=> {
-				  this.setState({
-					  token:data.token,
-					  isLogged:true
-				  })
-				  this.getList(data.token);
-			  }).catch((error) => {
-				  console.log(error)
-			  })
-		  } else {
-			  alert("Wrong credentials");
-		  }
-	  }).catch((error) => {
-		  console.log(error)
-	  })
-  }
+
 
   
-  logout = () => {
-	  let logoutObject = {
-		  method:"POST",
-		  mode:"cors",
-		  credentials:"include",
-		  headers:{"Content-Type":"application/json"}
-		  }	
-	  fetch("/logout", logoutObject).then((response) => {
-		  if(response.ok) {
-			  this.setState({
-				  token:"",
-				  isLogged:false
-			  })
-		  } else {
-			  console.log("Server responded with status:"+response.status)
-		  }
-	  }).catch((error) => {
-		  console.log(error);
-	  })
-  }
+
+
   render() {
     return (
       <div className="App">
-		<NavBar isLogged={this.state.isLogged}
-				logout={this.logout}/>
+		<NavBar />
 		<hr/>
-	    <Main addToList={this.addToList}
+	    <Main isLogged={this.props.isLogged} 
+			  addToList={this.addToList}
 			  list={this.state.list}
-			  removeFromList={this.removeFromList}
-			  login={this.login}
-			  register={this.register}
-			  isLogged={this.state.isLogged}/>
+			  removeFromList={this.removeFromList}/>
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+	return {
+		isLogged:state.isLogged
+	}
+}
+
+export default connect(mapStateToProps)(App);

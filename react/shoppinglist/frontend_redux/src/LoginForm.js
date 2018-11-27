@@ -1,6 +1,6 @@
 import React from 'react';
 import {Form,Button} from 'semantic-ui-react';
-import {register} from './actions/loginActions';
+import {register, login} from './actions/loginActions';
 import {connect} from 'react-redux';
 
 class LoginForm extends React.Component {
@@ -31,7 +31,7 @@ class LoginForm extends React.Component {
 		if(event.target.name === "register") {
 			this.props.dispatch(register(user));
 		} else {
-			this.props.login(user);
+			this.props.dispatch(login(user));
 		}
 	}
 	

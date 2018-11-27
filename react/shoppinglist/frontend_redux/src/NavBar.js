@@ -1,11 +1,13 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {List} from 'semantic-ui-react';
+import {logout} from './actions/loginActions';
+import {connect} from 'react-redux';
 
-export default class NavBar extends React.Component {
+class NavBar extends React.Component {
 	
 	logout = () => {
-		this.props.logout();
+		this.props.dispatch(logout());
 	}
 	
 	render() {
@@ -24,6 +26,16 @@ export default class NavBar extends React.Component {
 		} else {
 			navbar = <div style={{height:65}}/>
 		}
+		if(this.props.loginError.length > 0) {
+			navbar = <div style={{height:65}}>
+				<p>Error:{this.props.loginError}</p>
+				</div>
+		}
+		if(this.props.loading) {
+			navbar = <div style={{height:65}}>
+				<p> Loading ...</p>
+				</div>
+		}			
 		return (
 		<div>
 			{navbar}
@@ -32,3 +44,13 @@ export default class NavBar extends React.Component {
 	}
 
 }
+
+const mapStateToProps = (state) => {
+	return {
+		isLogged:state.isLogged,
+		loading:state.loading,
+		loginError:state.error
+	}	
+}
+
+export default connect(mapStateToProps)(NavBar);

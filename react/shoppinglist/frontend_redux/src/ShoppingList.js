@@ -1,8 +1,15 @@
 import React from 'react';
 import {Table,Button} from 'semantic-ui-react'; 
+import {connect} from 'react-redux';
 
-export default class ShoppingList extends React.Component {
+class ShoppingList extends React.Component {
 
+	componentDidMount() {
+		if(this.props.isLogged) {
+			//load list
+		}
+	}
+	
 	remove =(event) => {
 		this.props.removeFromList(event.target.name);
 	}
@@ -36,3 +43,11 @@ export default class ShoppingList extends React.Component {
 	}
 
 }
+
+const mapStateToProps = (state) => {
+	return {
+		isLogged:state.isLogged
+	}
+}
+
+export default connect(mapStateToProps)(ShoppingList);

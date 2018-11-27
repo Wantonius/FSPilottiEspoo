@@ -14,10 +14,14 @@ function getInitialState() {
 		if(sessionStorage.getItem("isLogged") === "true") {
 			tempIsLogged = true
 		}
+		let error="";
+		if(sessionStorage.getItem("login_error")) {
+			error = sessionStorage.getItem("login_error");
+		}
 		return {
 			isLogged:tempIsLogged,
 			loading:false,
-			error:sessionStorage.getItem("login_error")
+			error: error
 		}	
 	} else {
 		return {
@@ -30,7 +34,7 @@ function getInitialState() {
 
 function saveToStorage(isLogged, error) {
 	sessionStorage.setItem("isLogged",isLogged);
-	sessionStorage.setItem("error", "");
+	sessionStorage.setItem("login_error", "");
 }
 
 let initialState = getInitialState();
@@ -42,7 +46,8 @@ const loginReducer = (state = initialState, action) => {
 		case LOGIN_LOADING: 
 			tempState = {
 				...state,
-				loading:true
+				loading:true,
+				error:""
 			}
 			return tempState;
 		case REGISTER_SUCCESS:

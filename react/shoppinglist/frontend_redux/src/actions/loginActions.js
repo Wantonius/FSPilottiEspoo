@@ -16,6 +16,7 @@ export const register = (user) => {
 			  headers:{"Content-Type":"application/json"},
 			  body:JSON.stringify(user)
 			  }
+		  dispatch(loadingLogin());
 		  fetch("/register",registerObject).then((response) => {
 			  if(response.ok) {
 				  dispatch(registerSuccess());
@@ -28,6 +29,52 @@ export const register = (user) => {
 			  dispatch(registerFailed("Server not responding"));
 		  })
 	   }		
+}
+
+export const login = (user) => {
+	return dispatch => { 
+	  let loginObject = {
+		  method:"POST",
+		  mode:"cors",
+		  headers:{"Content-Type":"application/json"},
+		  body:JSON.stringify(user)
+		  }
+	  dispatch(loadingLogin());
+	  fetch("/login",loginObject).then((response) => {
+		  if(response.ok) {
+			  response.json().then((data)=> {
+				 dispatch(loginSuccess());
+			  }).catch((error) => {
+				 dispatch(loginFailed("Server responded with error"));
+			  })
+		  } else {
+			  dispatch(loginFailed("Wrong credentials"));
+		  }
+	  }).catch((error) => {
+		  dispatch(loginFailed("Server responded with error"));
+	  })
+  }
+}
+
+export const logout = () => {
+	return dispatch => {  
+	  let logoutObject = {
+		  method:"POST",
+		  mode:"cors",
+		  credentials:"include",
+		  headers:{"Content-Type":"application/json"}
+		  }	
+	  dispatch(loadingLogin());
+	  fetch("/logout", logoutObject).then((response) => {
+		  if(response.ok) {
+		      dispatch(logoutSuccess());
+		  } else {
+			  dispatch(logoutFailed("Server responded with status:"+response.status));
+		  }
+	  }).catch((error) => {
+		  dispatch(logoutFailed("Server responded with error"));
+	  })
+  }
 }
 // Action creators
 
