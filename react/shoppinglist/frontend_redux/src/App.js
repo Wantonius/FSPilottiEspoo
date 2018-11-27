@@ -4,6 +4,7 @@ import './App.css';
 import NavBar from './NavBar';
 import Main from './Main';
 import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
 
 class App extends Component {
   
@@ -113,4 +114,4 @@ const mapStateToProps = (state) => {
 	}
 }
 
-export default connect(mapStateToProps)(App);
+export default withRouter(connect(mapStateToProps)(App));

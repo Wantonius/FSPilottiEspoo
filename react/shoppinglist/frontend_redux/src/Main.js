@@ -3,7 +3,7 @@ import {Switch, Route, Redirect} from 'react-router-dom'
 import ShoppingList from './ShoppingList';
 import ShoppingForm from './ShoppingForm';
 import LoginForm from './LoginForm';
-import {connect} from 'react-redux';
+
 
 export default class Main extends React.Component {
 
@@ -13,8 +13,7 @@ export default class Main extends React.Component {
 				<Route exact path="/" render={() => 
 					this.props.isLogged ?
 					(<Redirect to="/list"/>) :
-					(<LoginForm login={this.props.login}
-						register={this.props.register}/>)
+					(<LoginForm />)
 				}/>
 				<Route path="/list" render={() => 
 					this.props.isLogged ?
