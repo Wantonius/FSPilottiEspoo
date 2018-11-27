@@ -15,58 +15,6 @@ class App extends Component {
 	  }
   }
  
-  
-  
-  //Shopping API
-  
-
-  
-  addToList = (item) => {
-	  let postObject = {
-		  method: "POST",
-		  mode: "cors",
-		  credentials:"include",
-		  headers: {"Content-Type":"application/json",
-					"token":this.state.token
-		  },
-		  body:JSON.stringify(item)
-	  }
-	fetch("/api/shopping", postObject).then((response) => {
-		if(response.ok) {
-			this.getList();
-		} else {
-			console.log("Response not ok. Status:"+response.status)
-		}
-	}).catch((error) => {
-		console.log(error);
-	});	  
-  }
-  
-  removeFromList = (id) => {
-	  let deleteObject= {
-			method:"DELETE",
-			mode:"cors",
-			credentials:"include",
-			headers:{"Content-Type":"application/json",
-			"token":this.state.token}
-	  }
-	  fetch("/api/shopping/"+id,deleteObject).then((response) => {
-		if(response.ok) {
-			this.getList();
-		} else {
-			console.log("Response not ok. Status:"+response.status)
-		}
-	}).catch((error) => {
-		console.log(error);
-	});	  
-  }
-  
-  //LOGIN API
-  
-
-
-  
-
 
   render() {
     return (

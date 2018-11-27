@@ -1,7 +1,7 @@
 import {GET_SHOPPINGLIST_SUCCESS,
 GET_SHOPPINGLIST_FAILED,
 ADD_TO_SHOPPINGLIST_SUCCESS,
-ADD_TO_SHOPPINGLIST_FAILED
+ADD_TO_SHOPPINGLIST_FAILED,
 DELETE_FROM_SHOPPINGLIST_SUCCESS,
 DELETE_FROM_SHOPPINGLIST_FAILED,
 SHOPPINGLIST_LOADING} from '../actions/shoppingActions'
@@ -29,7 +29,7 @@ function saveToStorage(list,error) {
 
 let initialState = getInitialState();
 
-export const shoppingReducer = (state = initialState, action) {
+const shoppingReducer = (state = initialState, action) => {
 	console.log("ShoppingReducer - action:"+action.type)
 	let tempState = {};
 	switch(action.type) {
@@ -89,3 +89,5 @@ export const shoppingReducer = (state = initialState, action) {
 		return state;
 	}
 }
+
+export default shoppingReducer;
