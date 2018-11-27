@@ -19,33 +19,7 @@ class App extends Component {
   
   //Shopping API
   
-  getList = (token) => {
-	  if(!token) {
-		  token = this.state.token
-	  }
-	  let getObject = {
-		  method: "GET",
-		  mode: "cors",
-		  credentials:"include",
-		  headers: {"Content-Type":"application/json",
-					 "token":token}
-	  }
-	fetch("/api/shopping", getObject).then((response) => {
-		if(response.ok) {
-			response.json().then((data) => {
-					this.setState({
-						list:data
-					})
-			}).catch((error) => {
-				console.log(error);
-			})
-		} else {
-			console.log("Response not ok. Status:"+response.status)
-		}
-	}).catch((error) => {
-		console.log(error);
-	});
-  }  
+
   
   addToList = (item) => {
 	  let postObject = {
