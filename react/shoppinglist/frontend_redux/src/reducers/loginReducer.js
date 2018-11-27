@@ -88,7 +88,7 @@ const loginReducer = (state = initialState, action) => {
 				loading:false,
 				error:""
 			}
-			saveToStorage("false","");
+			sessionStorage.clear();
 			return tempState;
 		case LOGOUT_FAILED: 
 			tempState = {

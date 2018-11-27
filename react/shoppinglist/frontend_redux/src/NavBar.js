@@ -26,9 +26,9 @@ class NavBar extends React.Component {
 		} else {
 			navbar = <div style={{height:65}}/>
 		}
-		if(this.props.loginError.length > 0) {
+		if(this.props.error.length > 0) {
 			navbar = <div style={{height:65}}>
-				<p>Error:{this.props.loginError}</p>
+				<p>Error:{this.props.error}</p>
 				</div>
 		}
 		if(this.props.loading) {
@@ -46,10 +46,21 @@ class NavBar extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+	let loading = false;
+	let error = ""
+	if(state.login.loading || state.shopping.loading) {
+		loading = true;
+	}
+	if(state.shopping.error.length > 0) {
+		error = state.shopping.error
+	}
+	if(state.login.error.length > 0) {
+		error = state.login.error
+	}
 	return {
-		isLogged:state.isLogged,
-		loading:state.loading,
-		loginError:state.error
+		isLogged:state.login.isLogged,
+		loading:loading,
+		error:error
 	}	
 }
 

@@ -1,17 +1,18 @@
 import React from 'react';
 import {Table,Button} from 'semantic-ui-react'; 
 import {connect} from 'react-redux';
+import {getList,removeFromList} from './actions/shoppingActions';
 
 class ShoppingList extends React.Component {
 
 	componentDidMount() {
 		if(this.props.isLogged) {
-			//load list
+		  this.props.dispatch(getList());
 		}
 	}
 	
 	remove =(event) => {
-		this.props.removeFromList(event.target.name);
+		this.props.dispatch(removeFromList(event.target.name));
 	}
 
 	render() {
@@ -45,8 +46,11 @@ class ShoppingList extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+	console.log(state);
+	console.log(state.shopping.list);
 	return {
-		isLogged:state.isLogged
+		isLogged:state.login.isLogged,
+		list:state.shopping.list
 	}
 }
 

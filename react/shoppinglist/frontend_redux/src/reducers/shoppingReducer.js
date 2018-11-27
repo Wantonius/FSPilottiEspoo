@@ -7,11 +7,8 @@ DELETE_FROM_SHOPPINGLIST_FAILED,
 SHOPPINGLIST_LOADING} from '../actions/shoppingActions'
 
 function getInitialState() {
-	let list = []
-	if(sessionStorage.getItem("list")) {
-		list = sessionStorage.getItem("list");
-	}
-	let error = ""
+	let list = [];
+	let error = "";
 	if(sessionStorage.getItem("shopping_error")) {
 		error = sessionStorage.getItem("shopping_error");
 	}
@@ -23,7 +20,6 @@ function getInitialState() {
 }
 
 function saveToStorage(list,error) {
-	sessionStorage.setItem("list",list);
 	sessionStorage.setItem("shopping_error",error);
 }
 

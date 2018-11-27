@@ -7,33 +7,19 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
 class App extends Component {
-  
-  constructor(props) {
-	  super(props);
-	  this.state = {
-		  list:[]
-	  }
-  }
- 
-
   render() {
     return (
       <div className="App">
 		<NavBar />
 		<hr/>
-	    <Main isLogged={this.props.isLogged} 
-			  addToList={this.addToList}
-			  list={this.state.list}
-			  removeFromList={this.removeFromList}/>
+	    <Main isLogged={this.props.isLogged} />
       </div>
     );
   }
 }
-
 const mapStateToProps = (state) => {
 	return {
-		isLogged:state.isLogged
+		isLogged:state.login.isLogged
 	}
 }
-
 export default withRouter(connect(mapStateToProps)(App));
