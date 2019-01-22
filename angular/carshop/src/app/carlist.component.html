@@ -1,0 +1,19 @@
+<table>
+	<thead>
+		<tr>
+			<th>Car type</th>
+			<th>Car price</th>
+			<th>Buy car</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let c of carList">
+			<td>{{c.type}}</td>
+			<td>{{c.price}}</td>
+			<td><button (click)="removeCar(c.id)">Buy</button></td>
+		</tr>
+	</tbody>
+</table>
+
+
+

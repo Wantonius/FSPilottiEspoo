@@ -1,0 +1,6 @@
+start frontend:
+ng serve --proxy-config proxy.conf.json
+
+start backend:
+cd backend
+node app
