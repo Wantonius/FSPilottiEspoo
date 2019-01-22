@@ -1,0 +1,28 @@
+<form (ngSubmit)="addCar()" #carForm="ngForm">
+	<label for="type">Car type</label>
+	<input type="text" name="type" id="type"
+	 [(ngModel)]="car.type" />
+	<label for="price">Car price</label>
+	<input type="number" step="5" minimum="0"
+	 name="price" id="price" [(ngModel)]="car.price"/>
+	<input type="submit" value="Add"/>
+</form>
+<table>
+	<thead>
+		<tr>
+			<th>Car type</th>
+			<th>Car price</th>
+			<th>Buy car</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let c of carList;let idx = index">
+			<td>{{c.type}}</td>
+			<td>{{c.price}}</td>
+			<td><button (click)="removeCar(idx)">Buy</button></td>
+		</tr>
+	</tbody>
+</table>
+
+
+
