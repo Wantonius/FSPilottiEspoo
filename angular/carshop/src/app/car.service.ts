@@ -24,7 +24,7 @@ export class CarService {
 	}
 	
 	removeCar(index:number) {
-		return this.http.delete("/api/cars/"+index);
+		return this.http.delete("/api/cars/"+index)
 
 	}
 }
